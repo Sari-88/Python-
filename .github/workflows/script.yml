@@ -23,7 +23,7 @@ jobs:
         pip install requests_html
         pip install pandas
         
-    # Install ChromeDriver
+    # Install Chrome and ChromeDriver
     - name: Install Chrome and ChromeDriver
       run: |
         sudo apt-get update
@@ -35,6 +35,7 @@ jobs:
       run: |
         sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
         export PATH=$PATH:/usr/lib/chromium-browser/
+        export CHROME_BIN=/usr/bin/chromium-browser
 
     # Run Python scripts
     - name: Run Python scripts
