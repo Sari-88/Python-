@@ -7,16 +7,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4  # Updated to v4 for Node.js 20 support
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4  # Updated to v4 for Node.js 20 support
       with:
         python-version: '3.x'
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-
+    
     - name: Run multiple Python scripts
       run: |
         python .github/workflows/Question1.py
@@ -26,3 +24,5 @@ jobs:
         python .github/workflows/Question5.py
         python .github/workflows/Question6.py
 
+# Allows you to run this workflow manually from the Actions tab
+workflow_dispatch:
