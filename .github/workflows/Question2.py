@@ -1,9 +1,17 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import pandas as pd
 
-# Initialize the Chrome WebDriver
-driver = webdriver.Chrome()
+# Set up Chrome options to handle the Chrome binary location in GitHub Actions
+chrome_options = Options()
+chrome_options.binary_location = '/usr/bin/chromium-browser'  # Path to Chromium (modify this if needed)
+chrome_options.add_argument('--headless')  # Run headless for performance in CI environments
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
+
+# Initialize the Chrome WebDriver with options
+driver = webdriver.Chrome(options=chrome_options)
 
 # Navigate to the Tesla revenue page
 url = "https://www.macrotrends.net/stocks/charts/TSLA/tesla/revenue"
@@ -20,7 +28,8 @@ tables = soup.find_all('table')
 print(f"Number of tables found: {len(tables)}")
 
 if len(tables) > 1:
-    revenue_table = tables[1]  # The second table contains the data
+    # Assuming the second table contains the revenue data
+    revenue_table = tables[1]  
     data = []
     for row in revenue_table.find_all("tr")[1:]:  # Skip the header row
         columns = row.find_all("td")
@@ -33,6 +42,7 @@ if len(tables) > 1:
     revenue_df = pd.DataFrame(data, columns=["Date", "Revenue"])
     revenue_df["Revenue"] = pd.to_numeric(revenue_df["Revenue"], errors="coerce")
     
+    # Display the last 5 rows
     print(revenue_df.tail())
 else:
     print("Expected table not found.")
