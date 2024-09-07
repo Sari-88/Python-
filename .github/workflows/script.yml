@@ -14,10 +14,29 @@ jobs:
       with:
         python-version: '3.x'
 
+    # Install dependencies including Selenium and Web Driver
     - name: Install dependencies
       run: |
         pip install yfinance
+        pip install selenium
+        pip install beautifulsoup4
+        pip install requests_html
+        pip install pandas
+        
+    # Install ChromeDriver
+    - name: Install Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser
+        sudo apt-get install -y chromium-chromedriver
 
+    # Set ChromeDriver path and permissions
+    - name: Set ChromeDriver path
+      run: |
+        sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
+        export PATH=$PATH:/usr/lib/chromium-browser/
+
+    # Run Python scripts
     - name: Run Python scripts
       run: |
         python .github/workflows/Question1.py
