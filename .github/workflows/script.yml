@@ -41,5 +41,5 @@ jobs:
     # Run Python scripts
     - name: Run Python scripts
       run: |
-        python .github/workflows/Question3.py
+        python .github/workflows/Question4.py
         
