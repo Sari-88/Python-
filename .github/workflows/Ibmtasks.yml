@@ -23,6 +23,6 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: ibm tasks 
-        run: Python. github/workflows/IBM_Tasks. Pyr
+        run: python. github/workflows/IBM_Tasks. Pyr
 
   
