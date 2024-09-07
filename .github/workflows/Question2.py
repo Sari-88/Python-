@@ -1,40 +1,41 @@
-import requests
+from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
 
-# Define the URL for GameStop revenue
-url = 'https://www.macrotrends.net/stocks/charts/GME/gamestop/revenue'
+# Initialize the Chrome WebDriver
+driver = webdriver.Chrome()
 
-# Send a GET request to the website
-response = requests.get(url)
-soup = BeautifulSoup(response.text, 'html.parser')
+# Navigate to the Tesla revenue page
+url = "https://www.macrotrends.net/stocks/charts/TSLA/tesla/revenue"
+driver.get(url)
 
-# Find all tables in the HTML
+# Let the browser load fully
+driver.implicitly_wait(10)  # wait for 10 seconds to let the page load completely
+
+# Parse the page source with BeautifulSoup
+soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+# Find the table in the page
 tables = soup.find_all('table')
+print(f"Number of tables found: {len(tables)}")
 
-# Check if the tables list contains at least two tables
 if len(tables) > 1:
-    # The relevant table might be the second one, so we select it
-    gme_revenue_table = tables[1]
-
-    # Extract the rows from the table
-    rows = gme_revenue_table.find_all('tr')
-
-    # Create a list to hold the extracted data
+    revenue_table = tables[1]  # The second table contains the data
     data = []
-
-    # Iterate over each row and extract the columns
-    for row in rows[1:]:  # Skip the header row
-        columns = row.find_all('td')
-        if len(columns) >= 2:
+    for row in revenue_table.find_all("tr")[1:]:  # Skip the header row
+        columns = row.find_all("td")
+        if len(columns) > 1:
             date = columns[0].text.strip()
-            revenue = columns[1].text.strip()
+            revenue = columns[1].text.strip().replace("$", "").replace(",", "")
             data.append([date, revenue])
-
-    # Create a DataFrame from the data
-    gme_revenue = pd.DataFrame(data, columns=['Date', 'Revenue'])
-
-    # Display the last five rows of the DataFrame
-    print(gme_revenue.tail())
+    
+    # Convert to DataFrame
+    revenue_df = pd.DataFrame(data, columns=["Date", "Revenue"])
+    revenue_df["Revenue"] = pd.to_numeric(revenue_df["Revenue"], errors="coerce")
+    
+    print(revenue_df.tail())
 else:
-    print("The expected table was not found on the page.")
+    print("Expected table not found.")
+
+# Close the browser session
+driver.quit()
