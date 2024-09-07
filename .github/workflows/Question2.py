@@ -2,8 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-# Define the URL
-url = 'https://www.macrotrends.net/stocks/charts/TSLA/tesla/revenue'
+# Define the URL for GameStop revenue
+url = 'https://www.macrotrends.net/stocks/charts/GME/gamestop/revenue'
 
 # Send a GET request to the website
 response = requests.get(url)
@@ -15,10 +15,10 @@ tables = soup.find_all('table')
 # Check if the tables list contains at least two tables
 if len(tables) > 1:
     # The relevant table might be the second one, so we select it
-    tesla_revenue_table = tables[1]
+    gme_revenue_table = tables[1]
 
     # Extract the rows from the table
-    rows = tesla_revenue_table.find_all('tr')
+    rows = gme_revenue_table.find_all('tr')
 
     # Create a list to hold the extracted data
     data = []
@@ -32,9 +32,9 @@ if len(tables) > 1:
             data.append([date, revenue])
 
     # Create a DataFrame from the data
-    tesla_revenue = pd.DataFrame(data, columns=['Date', 'Revenue'])
+    gme_revenue = pd.DataFrame(data, columns=['Date', 'Revenue'])
 
     # Display the last five rows of the DataFrame
-    print(tesla_revenue.tail())
+    print(gme_revenue.tail())
 else:
     print("The expected table was not found on the page.")
