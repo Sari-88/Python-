@@ -42,8 +42,4 @@ jobs:
     - name: Run Python scripts
       run: |
         python .github/workflows/Question1.py
-        python .github/workflows/Question2.py
-        python .github/workflows/Question3.py
-        python .github/workflows/Question4.py
-        python .github/workflows/Question5.py
-        python .github/workflows/Question6.py
+        
