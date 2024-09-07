@@ -7,15 +7,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4  # Updated to v4 for Node.js 20 support
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4  # Updated to v4 for Node.js 20 support
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
-    
-    - name: Run multiple Python scripts
+    - name: Install dependencies
+      run: |
+        pip install yfinance
+
+    - name: Run Python scripts
       run: |
         python .github/workflows/Question1.py
         python .github/workflows/Question2.py
