@@ -9,26 +9,32 @@ url = 'https://www.macrotrends.net/stocks/charts/TSLA/tesla/revenue'
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
 
-# Find the table containing the revenue data
+# Find all tables in the HTML
 tables = soup.find_all('table')
-# The relevant table might be the second one, so we select it
-tesla_revenue_table = tables[1]
 
-# Extract the rows from the table
-rows = tesla_revenue_table.find_all('tr')
+# Check if the tables list contains at least two tables
+if len(tables) > 1:
+    # The relevant table might be the second one, so we select it
+    tesla_revenue_table = tables[1]
 
-# Create a list to hold the extracted data
-data = []
+    # Extract the rows from the table
+    rows = tesla_revenue_table.find_all('tr')
 
-# Iterate over each row and extract the columns
-for row in rows[1:]:  # Skip the header row
-    columns = row.find_all('td')
-    date = columns[0].text.strip()
-    revenue = columns[1].text.strip()
-    data.append([date, revenue])
+    # Create a list to hold the extracted data
+    data = []
 
-# Create a DataFrame from the data
-tesla_revenue = pd.DataFrame(data, columns=['Date', 'Revenue'])
+    # Iterate over each row and extract the columns
+    for row in rows[1:]:  # Skip the header row
+        columns = row.find_all('td')
+        if len(columns) >= 2:
+            date = columns[0].text.strip()
+            revenue = columns[1].text.strip()
+            data.append([date, revenue])
 
-# Display the last five rows of the DataFrame
-print(tesla_revenue.tail())
+    # Create a DataFrame from the data
+    tesla_revenue = pd.DataFrame(data, columns=['Date', 'Revenue'])
+
+    # Display the last five rows of the DataFrame
+    print(tesla_revenue.tail())
+else:
+    print("The expected table was not found on the page.")
