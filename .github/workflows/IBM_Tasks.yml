@@ -22,5 +22,5 @@ jobs:
       - uses: actions/checkout@v4
 
       # Runs a single command using the runners shell
-      - name: Run IBM Tasks
+      - name: Run IBM_Tasks
         run: python github/workflows/IBM_Tasks.py
